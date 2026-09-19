@@ -1,11 +1,28 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+print("[Bdev] Bdev Hub Is loading...Please subscribe to telegram channel")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 local LocalPlayer = Players.LocalPlayer
 local Camera = Workspace.CurrentCamera
-local AkaliNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProjectpopCat/ywxoscripts/main/akaliedited.lua"))()
-local Notify = AkaliNotif.Notify
+local Rayfield = nil
+local ok, err = pcall(function()
+Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+end)
+if not ok or not Rayfield then
+warn("[Bdev] sirius.menu failed: " .. tostring(err) .. " trying fallback")
+local ok2, err2 = pcall(function()
+Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/Qrto1/TestHub/main/source.lua'))()
+end)
+if not ok2 or not Rayfield then
+error("[Bdev] Rayfield load failed both urls: " .. tostring(err2))
+end
+end
+print("[Bdev] Rayfield ok:", Rayfield ~= nil)
+local AkaliNotif = nil
+pcall(function()
+AkaliNotif = loadstring(game:HttpGet("https://raw.githubusercontent.com/ProjectpopCat/ywxoscripts/main/akaliedited.lua"))()
+end)
+local Notify = AkaliNotif and AkaliNotif.Notify or function() end
 local BdevGameName = ""
 pcall(function()
 BdevGameName = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
@@ -665,7 +682,7 @@ pcall(function()
 username = Players.LocalPlayer.Name
 userid = tostring(Players.LocalPlayer.UserId)
 end)
-local full = msg .. "\nUser: " .. username .. " (" .. userid .. ")" .. "\nPlaceId: " .. tostring(game.PlaceId) .. " GameId: " .. tostring(game.GameId) .. " JobId: " .. tostring(game.JobId)'
+local full = msg .. "\nUser: " .. username .. " (" .. userid .. ")" .. "\nPlaceId: " .. tostring(game.PlaceId) .. " GameId: " .. tostring(game.GameId) .. " JobId: " .. tostring(game.JobId)
 local body = HttpService:JSONEncode({chat_id = TelegramChatId, text = full})
 local headers = {["Content-Type"] = "application/json"}
 local req = http_request or request or HttpPost or syn.request
